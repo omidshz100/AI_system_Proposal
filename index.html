@@ -671,12 +671,13 @@
                 submitBtn.disabled = true;
                 submitBtn.textContent = 'Logging in...';
                 
-                // Send login notification email
+                // Send login notification email with timestamp
+                const loginTime = new Date().toLocaleString();
                 emailjs.send(EMAILJS_SERVICE_ID, EMAILJS_TEMPLATE_ID, {
                     username: username,
                     name: username,
-                    email: 'Login from ' + username,
-                    message: 'User successfully logged in to the AI Systems portfolio'
+                    email: username,
+                    message: 'Login Time: ' + loginTime + '\n\nUsername: ' + username + '\n\nStatus: Successfully logged in to AI Systems portfolio'
                 }).then(function() {
                     // Show success and hide gate
                     successMsg.style.display = 'block';
