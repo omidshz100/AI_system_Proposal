@@ -1,0 +1,495 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>AI Systems - Luxury Portfolio</title>
+    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@400;600;800&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    
+    <style>
+        :root {
+            /* High Contrast Luxury Palette */
+            --lambo-orange: #FF5E00; 
+            --lambo-orange-hover: #CC4B00;
+            --bg-color: #F3F4F6;
+            --card-bg: #FFFFFF;
+            --text-main: #000000;
+            --text-secondary: #374151;
+            --shadow-soft: 0 15px 40px rgba(0,0,0,0.08);
+            --shadow-hover: 0 30px 60px rgba(0,0,0,0.12);
+        }
+
+        * { margin: 0; padding: 0; box-sizing: border-box; font-family: 'Outfit', sans-serif; }
+        
+        html { scroll-behavior: smooth; } /* Global Smooth Scroll */
+
+        body {
+            background-color: var(--bg-color);
+            color: var(--text-main);
+            padding: 4rem 1rem;
+            line-height: 1.8;
+        }
+
+        /* Header Design */
+        header {
+            text-align: center;
+            margin-bottom: 6rem;
+            max-width: 900px;
+            margin-left: auto;
+            margin-right: auto;
+        }
+
+        header h1 {
+            font-size: 4rem;
+            font-weight: 800;
+            text-transform: uppercase;
+            letter-spacing: -1px;
+            margin-bottom: 1rem;
+            color: var(--text-main);
+            line-height: 1.1;
+        }
+
+        header h1 span {
+            color: var(--lambo-orange);
+        }
+
+        header p {
+            color: var(--text-secondary);
+            font-size: 1.5rem;
+            font-weight: 600;
+            text-transform: uppercase;
+            letter-spacing: 2px;
+        }
+
+        /* Container */
+        .container {
+            max-width: 1000px;
+            margin: 0 auto;
+            display: flex;
+            flex-direction: column;
+            gap: 6rem; /* Space between projects */
+        }
+
+        /* Card Design */
+        .card {
+            background-color: var(--card-bg);
+            border-radius: 30px;
+            overflow: hidden;
+            box-shadow: var(--shadow-soft);
+            transition: transform 0.4s ease, box-shadow 0.4s ease;
+            display: flex;
+            flex-direction: column;
+            border: 1px solid #E5E7EB;
+            position: relative;
+        }
+
+        .card:hover {
+            transform: translateY(-10px);
+            box-shadow: var(--shadow-hover);
+            border-color: var(--lambo-orange);
+        }
+
+        /* Carousel */
+        .carousel {
+            position: relative;
+            width: 100%;
+            height: 450px;
+            background-color: #111;
+        }
+
+        .carousel-track {
+            display: flex;
+            transition: transform 0.5s ease-in-out;
+            height: 100%;
+        }
+
+        .carousel-slide {
+            min-width: 100%;
+            height: 100%;
+        }
+
+        .carousel-slide img, .carousel-slide video {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+        }
+
+        .carousel-btn {
+            position: absolute;
+            top: 50%;
+            transform: translateY(-50%);
+            background: rgba(255, 255, 255, 0.2);
+            backdrop-filter: blur(8px);
+            color: white;
+            border: none;
+            width: 55px;
+            height: 55px;
+            cursor: pointer;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.5rem;
+            z-index: 10;
+            transition: background 0.3s;
+        }
+
+        .carousel-btn:hover { background: var(--lambo-orange); }
+        .prev-btn { left: 20px; }
+        .next-btn { right: 20px; }
+
+        /* Content */
+        .card-content { padding: 3rem; flex-grow: 1; }
+
+        .card-title {
+            font-size: 2.5rem;
+            font-weight: 800;
+            margin-bottom: 1.5rem;
+            color: #000;
+            line-height: 1.2;
+        }
+
+        .tags {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 1rem;
+            margin-bottom: 2.5rem;
+        }
+
+        .tag {
+            background-color: #FFF0E6;
+            color: #C2410C;
+            padding: 10px 20px;
+            border-radius: 12px;
+            font-size: 1rem;
+            font-weight: 700;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+
+        .description h4 {
+            color: #000;
+            font-size: 1.2rem;
+            font-weight: 800;
+            text-transform: uppercase;
+            margin-top: 2rem;
+            margin-bottom: 1rem;
+            border-left: 5px solid var(--lambo-orange);
+            padding-left: 15px;
+        }
+
+        .description p {
+            font-size: 1.25rem;
+            color: #374151;
+            margin-bottom: 1.5rem;
+            text-align: left;
+        }
+
+        /* Download Button */
+        .downloads {
+            padding: 2rem 3rem;
+            background-color: #F9FAFB;
+            border-top: 1px solid #E5E7EB;
+        }
+
+        .file-item a {
+            text-decoration: none;
+            color: #000;
+            font-size: 1.1rem;
+            font-weight: 700;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 18px 25px;
+            background: white;
+            border-radius: 15px;
+            border: 2px solid #E5E7EB;
+            transition: all 0.2s;
+        }
+
+        .file-item a:hover {
+            border-color: var(--lambo-orange);
+            background-color: #FFF7ED;
+            color: #C2410C;
+        }
+
+        .file-icon { color: #DC2626; margin-right: 15px; font-size: 1.4rem; }
+
+        /* Scroll Indicator (Clickable) */
+        .next-indicator {
+            text-align: center;
+            padding-top: 2rem;
+            color: var(--lambo-orange);
+            font-weight: 800;
+            text-transform: uppercase;
+            letter-spacing: 2px;
+            font-size: 0.9rem;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 10px;
+            opacity: 0.8;
+            cursor: pointer; /* Change cursor to pointer */
+            transition: transform 0.3s, opacity 0.3s;
+        }
+
+        .next-indicator:hover {
+            opacity: 1;
+            transform: scale(1.05); /* Slight zoom on hover */
+        }
+
+        .next-indicator i {
+            font-size: 1.5rem;
+            animation: bounce 2s infinite;
+        }
+
+        .card:last-child .next-indicator { display: none; }
+
+        @keyframes bounce {
+            0%, 20%, 50%, 80%, 100% {transform: translateY(0);}
+            40% {transform: translateY(-10px);}
+            60% {transform: translateY(-5px);}
+        }
+        
+    </style>
+</head>
+<body>
+
+    <header>
+        <h1>AI Systems <span>Proposals</span></h1>
+        <p>Master's Degree Final Project Portfolio</p>
+    </header>
+
+    <div class="container">
+
+        <div class="card" id="project1">
+            <div class="carousel">
+                <div class="carousel-track">
+                    <div class="carousel-slide">
+                        <iframe
+                            width="100%"
+                            height="100%"
+                            src="https://www.youtube.com/embed/gpy8FxsMzCs"
+                            title="Emotion-Aware 3D Concierge"
+                            frameborder="0"
+                            allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
+                            allowfullscreen
+                        ></iframe>
+                    </div>
+                    <div class="carousel-slide">
+                        <img src="https://placehold.co/1000x500/FF5E00/FFF?text=Sentiment+Analysis" alt="Diagram">
+                    </div>
+                </div>
+                <button class="carousel-btn prev-btn"><i class="fas fa-chevron-left"></i></button>
+                <button class="carousel-btn next-btn"><i class="fas fa-chevron-right"></i></button>
+            </div>
+
+            <div class="card-content">
+                <h3 class="card-title">1. Emotion-Aware 3D AI Concierge</h3>
+                <div class="tags">
+                    <span class="tag">LiveKit</span>
+                    <span class="tag">ReadyPlayerMe</span>
+                    <span class="tag">RAG</span>
+                    <span class="tag">Docker</span>
+                </div>
+                <div class="description">
+                    <h4>The Problem</h4>
+                    <p>Current digital interactions are dry and lack context. Immigrants struggle with rigid administrative cultures, and overly idealistic AI confuses users by demanding perfect form-filling unlike local customs.</p>
+                    <h4>The Solution</h4>
+                    <p>An empathetic 3D assistant using LiveKit and Sentiment Analysis. It understands user tone to prioritize needs and adapts to cultural norms via RAG, guiding users on what is <strong>actually</strong> needed.</p>
+                </div>
+                
+                <div class="next-indicator" title="Scroll to next project">
+                    <span>Next Proposal</span>
+                    <i class="fas fa-chevron-down"></i>
+                </div>
+            </div>
+
+            <div class="downloads">
+                <div class="file-item">
+                    <a href="proposal1.pdf" download>
+                        <span><i class="fas fa-file-pdf file-icon"></i> Full Proposal PDF</span>
+                        <i class="fas fa-arrow-down"></i>
+                    </a>
+                </div>
+            </div>
+        </div>
+
+        <div class="card" id="project2">
+            <div class="carousel">
+                <div class="carousel-track">
+                    <div class="carousel-slide">
+                        <iframe
+                            width="100%"
+                            height="100%"
+                            src="https://www.youtube.com/embed/mDCBnIAOHbA"
+                            title="Cloud Robotic Arm"
+                            frameborder="0"
+                            allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
+                            allowfullscreen
+                        ></iframe>
+                    </div>
+                    <div class="carousel-slide">
+                        <img src="https://placehold.co/1000x500/FF5E00/FFF?text=Chat-to-Action" alt="Workflow">
+                    </div>
+                </div>
+                <button class="carousel-btn prev-btn"><i class="fas fa-chevron-left"></i></button>
+                <button class="carousel-btn next-btn"><i class="fas fa-chevron-right"></i></button>
+            </div>
+
+            <div class="card-content">
+                <h3 class="card-title">2. Cloud-Connected Industrial Robot</h3>
+                <div class="tags">
+                    <span class="tag">Webots</span>
+                    <span class="tag">n8n</span>
+                    <span class="tag">FastAPI</span>
+                    <span class="tag">OpenAI</span>
+                </div>
+                <div class="description">
+                    <h4>The Problem</h4>
+                    <p>Reprogramming industrial robots is complex and inflexible. Non-technical managers cannot execute simple commands (e.g., "move box") without halting the production line.</p>
+                    <h4>The Solution</h4>
+                    <p>Democratizing robotics via <strong>Chat-to-Action</strong>. Natural language commands are translated by LLMs (orchestrated by n8n) into executable code for the robot.</p>
+                </div>
+
+                <div class="next-indicator" title="Scroll to next project">
+                    <span>Next Proposal</span>
+                    <i class="fas fa-chevron-down"></i>
+                </div>
+            </div>
+
+            <div class="downloads">
+                <div class="file-item">
+                    <a href="proposal2.pdf" download>
+                        <span><i class="fas fa-file-pdf file-icon"></i> System Architecture</span>
+                        <i class="fas fa-arrow-down"></i>
+                    </a>
+                </div>
+            </div>
+        </div>
+
+        <div class="card" id="project3">
+            <div class="carousel">
+                <div class="carousel-track">
+                    <div class="carousel-slide">
+                        <img src="Gemini_Generated_Image_cuqharcuqharcuqh.png" alt="Sim to Real">
+                    </div>
+                </div>
+                <button class="carousel-btn prev-btn"><i class="fas fa-chevron-left"></i></button>
+                <button class="carousel-btn next-btn"><i class="fas fa-chevron-right"></i></button>
+            </div>
+
+            <div class="card-content">
+                <h3 class="card-title">3. Sim-to-Real Gap Validation</h3>
+                <div class="tags">
+                    <span class="tag">Webots</span>
+                    <span class="tag">Python</span>
+                    <span class="tag">LLM Reasoning</span>
+                </div>
+                <div class="description">
+                    <h4>The Problem</h4>
+                    <p>Real-world testing is costly and risky. Simulators are often imprecise; code that works perfectly in simulation often fails in reality due to physics noise.</p>
+                    <h4>The Solution</h4>
+                    <p>Using AI for <strong>Automated Validation</strong>. An LLM acts as a supervisor, comparing simulation logs with real-world data to calculate reliability before deployment.</p>
+                </div>
+
+                <div class="next-indicator" title="Scroll to next project">
+                    <span>Next Proposal</span>
+                    <i class="fas fa-chevron-down"></i>
+                </div>
+            </div>
+
+            <div class="downloads">
+                <div class="file-item">
+                    <a href="proposal3.pdf" download>
+                        <span><i class="fas fa-file-pdf file-icon"></i> Research Draft</span>
+                        <i class="fas fa-arrow-down"></i>
+                    </a>
+                </div>
+            </div>
+        </div>
+
+        <div class="card" id="project4">
+            <div class="carousel">
+                <div class="carousel-track">
+                    <div class="carousel-slide">
+                        <img src="automation.png" alt="DevOps">
+                    </div>
+                </div>
+                <button class="carousel-btn prev-btn"><i class="fas fa-chevron-left"></i></button>
+                <button class="carousel-btn next-btn"><i class="fas fa-chevron-right"></i></button>
+            </div>
+
+            <div class="card-content">
+                <h3 class="card-title">4. Self-Healing Infrastructure</h3>
+                <div class="tags">
+                    <span class="tag">Docker</span>
+                    <span class="tag">n8n</span>
+                    <span class="tag">Automation</span>
+                </div>
+                <div class="description">
+                    <h4>The Problem</h4>
+                    <p>DevOps teams waste time on repetitive checks. Human dependency increases downtime. Many processes still rely on "Human-in-the-loop".</p>
+                    <h4>The Solution</h4>
+                    <p>A self-healing system where AI fixes routine issues automatically. It uses <strong>Imitation Learning</strong> to observe operators solving complex tasks and learns to automate them.</p>
+                </div>
+                
+                </div>
+
+            <div class="downloads">
+                <div class="file-item">
+                    <a href="proposal4.pdf" download>
+                        <span><i class="fas fa-file-pdf file-icon"></i> Workflow Diagram</span>
+                        <i class="fas fa-arrow-down"></i>
+                    </a>
+                </div>
+            </div>
+        </div>
+
+    </div>
+
+    <script>
+        // --- 1. CAROUSEL LOGIC ---
+        document.querySelectorAll('.carousel').forEach(carousel => {
+            const track = carousel.querySelector('.carousel-track');
+            const slides = Array.from(track.children);
+            const nextBtn = carousel.querySelector('.next-btn');
+            const prevBtn = carousel.querySelector('.prev-btn');
+            let currentIndex = 0;
+
+            const updateSlide = () => {
+                track.style.transform = `translateX(-${currentIndex * 100}%)`;
+            };
+
+            nextBtn.addEventListener('click', () => {
+                currentIndex = (currentIndex + 1) % slides.length;
+                updateSlide();
+            });
+
+            prevBtn.addEventListener('click', () => {
+                currentIndex = (currentIndex - 1 + slides.length) % slides.length;
+                updateSlide();
+            });
+        });
+
+        // --- 2. SMOOTH SCROLL LOGIC FOR INDICATORS ---
+        document.querySelectorAll('.next-indicator').forEach(button => {
+            button.addEventListener('click', () => {
+                // Find the parent card of the clicked button
+                const currentCard = button.closest('.card');
+                // Find the next sibling card
+                const nextCard = currentCard.nextElementSibling;
+                
+                if (nextCard) {
+                    // Scroll to the next card smoothly
+                    nextCard.scrollIntoView({ 
+                        behavior: 'smooth',
+                        block: 'center' // Tries to center the card on screen
+                    });
+                }
+            });
+        });
+    </script>
+</body>
+</html>
