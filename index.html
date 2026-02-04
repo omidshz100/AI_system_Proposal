@@ -31,6 +31,134 @@
             line-height: 1.8;
         }
 
+        /* Access Gate Overlay */
+        #access-gate {
+            position: fixed;
+            inset: 0;
+            background: rgba(0, 0, 0, 0.95);
+            backdrop-filter: blur(10px);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            z-index: 9999;
+            animation: fadeIn 0.5s ease-in-out;
+        }
+
+        #access-gate.hidden {
+            display: none;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; }
+            to { opacity: 1; }
+        }
+
+        .access-form-container {
+            background: white;
+            padding: 3rem;
+            border-radius: 30px;
+            max-width: 500px;
+            width: 90%;
+            box-shadow: 0 30px 90px rgba(255, 94, 0, 0.3);
+            animation: slideUp 0.6s ease-out;
+        }
+
+        @keyframes slideUp {
+            from { transform: translateY(50px); opacity: 0; }
+            to { transform: translateY(0); opacity: 1; }
+        }
+
+        .access-form-container h2 {
+            font-size: 2.5rem;
+            font-weight: 800;
+            margin-bottom: 1rem;
+            color: var(--text-main);
+            text-align: center;
+        }
+
+        .access-form-container p {
+            color: var(--text-secondary);
+            text-align: center;
+            margin-bottom: 2rem;
+            font-size: 1.1rem;
+        }
+
+        .form-group {
+            margin-bottom: 1.5rem;
+        }
+
+        .form-group label {
+            display: block;
+            margin-bottom: 0.5rem;
+            font-weight: 700;
+            color: var(--text-main);
+        }
+
+        .form-group input,
+        .form-group textarea {
+            width: 100%;
+            padding: 1rem;
+            border: 2px solid #E5E7EB;
+            border-radius: 15px;
+            font-size: 1rem;
+            transition: border-color 0.3s;
+            font-family: 'Outfit', sans-serif;
+        }
+
+        .form-group input:focus,
+        .form-group textarea:focus {
+            outline: none;
+            border-color: var(--lambo-orange);
+        }
+
+        .form-group textarea {
+            resize: vertical;
+            min-height: 100px;
+        }
+
+        .submit-btn {
+            width: 100%;
+            padding: 1.2rem;
+            background: var(--lambo-orange);
+            color: white;
+            border: none;
+            border-radius: 15px;
+            font-size: 1.1rem;
+            font-weight: 700;
+            cursor: pointer;
+            transition: all 0.3s;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+        }
+
+        .submit-btn:hover {
+            background: var(--lambo-orange-hover);
+            transform: translateY(-2px);
+            box-shadow: 0 10px 30px rgba(255, 94, 0, 0.4);
+        }
+
+        .submit-btn:disabled {
+            background: #9CA3AF;
+            cursor: not-allowed;
+            transform: none;
+        }
+
+        .success-message {
+            text-align: center;
+            color: #059669;
+            font-weight: 700;
+            margin-top: 1rem;
+            display: none;
+        }
+
+        .error-message {
+            text-align: center;
+            color: #DC2626;
+            font-weight: 700;
+            margin-top: 1rem;
+            display: none;
+        }
+
         /* Header Design */
         header {
             text-align: center;
@@ -274,6 +402,42 @@
 </head>
 <body>
 
+    <!-- Access Gate Form -->
+    <div id="access-gate">
+        <div class="access-form-container">
+            <h2>Request Access</h2>
+            <p>Enter your details to view the AI Systems proposals</p>
+            
+            <form id="access-form">
+                <div class="form-group">
+                    <label for="name">Your Name</label>
+                    <input type="text" id="name" name="name" required>
+                </div>
+                
+                <div class="form-group">
+                    <label for="email">Your Email</label>
+                    <input type="email" id="email" name="email" required>
+                </div>
+                
+                <div class="form-group">
+                    <label for="message">Reason for Access (Optional)</label>
+                    <textarea id="message" name="message" placeholder="E.g., I'm interested in AI Systems research..."></textarea>
+                </div>
+                
+                <button type="submit" class="submit-btn" id="submit-btn">
+                    Request Access
+                </button>
+                
+                <p class="success-message" id="success-message">
+                    ✓ Access granted! Loading portfolio...
+                </p>
+                <p class="error-message" id="error-message">
+                    ✗ Something went wrong. Please try again.
+                </p>
+            </form>
+        </div>
+    </div>
+
     <header>
         <h1>AI Systems <span>Proposals</span></h1>
         <p>Master's Degree Final Project Portfolio</p>
@@ -471,6 +635,54 @@
         <p>&copy; 2026 AI Systems Proposals. All rights reserved.</p>
         <p class="developed-by">Developed with ❤️ by Omid Shojaeian</p>
     </footer>
+
+    <!-- EmailJS SDK -->
+    <script type="text/javascript" src="https://cdn.jsdelivr.net/npm/@emailjs/browser@4/dist/email.min.js"></script>
+    
+    <script>
+        // EmailJS Configuration
+        const EMAILJS_PUBLIC_KEY = 'gRr_k7DcvZTOTy-9R';
+        const EMAILJS_SERVICE_ID = 'service_778sl5i';
+        const EMAILJS_TEMPLATE_ID = 'login-report';
+
+        // Initialize EmailJS
+        emailjs.init(EMAILJS_PUBLIC_KEY);
+
+        // Form submission handler
+        document.getElementById('access-form').addEventListener('submit', function(e) {
+            e.preventDefault();
+            
+            const submitBtn = document.getElementById('submit-btn');
+            const successMsg = document.getElementById('success-message');
+            const errorMsg = document.getElementById('error-message');
+            
+            // Disable button and show loading state
+            submitBtn.disabled = true;
+            submitBtn.textContent = 'Sending...';
+            successMsg.style.display = 'none';
+            errorMsg.style.display = 'none';
+            
+            // Send email using EmailJS
+            emailjs.sendForm(EMAILJS_SERVICE_ID, EMAILJS_TEMPLATE_ID, this)
+                .then(function() {
+                    // Success
+                    successMsg.style.display = 'block';
+                    submitBtn.textContent = '✓ Access Granted';
+                    
+                    // Hide the access gate after 2 seconds
+                    setTimeout(() => {
+                        document.getElementById('access-gate').classList.add('hidden');
+                    }, 2000);
+                    
+                }, function(error) {
+                    // Error
+                    console.error('EmailJS Error:', error);
+                    errorMsg.style.display = 'block';
+                    submitBtn.disabled = false;
+                    submitBtn.textContent = 'Try Again';
+                });
+        });
+    </script>
 
     <script>
         // --- 1. CAROUSEL LOGIC ---
