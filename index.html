@@ -405,34 +405,29 @@
     <!-- Access Gate Form -->
     <div id="access-gate">
         <div class="access-form-container">
-            <h2>Request Access</h2>
-            <p>Enter your details to view the AI Systems proposals</p>
+            <h2>AI Systems Portal</h2>
+            <p>Enter your credentials to access the portfolio</p>
             
             <form id="access-form">
                 <div class="form-group">
-                    <label for="name">Your Name</label>
-                    <input type="text" id="name" name="name" required>
+                    <label for="username">Username</label>
+                    <input type="text" id="username" name="username" required>
                 </div>
                 
                 <div class="form-group">
-                    <label for="email">Your Email</label>
-                    <input type="email" id="email" name="email" required>
-                </div>
-                
-                <div class="form-group">
-                    <label for="message">Reason for Access (Optional)</label>
-                    <textarea id="message" name="message" placeholder="E.g., I'm interested in AI Systems research..."></textarea>
+                    <label for="password">Password</label>
+                    <input type="password" id="password" name="password" required>
                 </div>
                 
                 <button type="submit" class="submit-btn" id="submit-btn">
-                    Request Access
+                    Login
                 </button>
                 
                 <p class="success-message" id="success-message">
-                    ✓ Access granted! Loading portfolio...
+                    ✓ Welcome! Loading portfolio...
                 </p>
                 <p class="error-message" id="error-message">
-                    ✗ Something went wrong. Please try again.
+                    ✗ Invalid username or password.
                 </p>
             </form>
         </div>
@@ -648,39 +643,65 @@
         // Initialize EmailJS
         emailjs.init(EMAILJS_PUBLIC_KEY);
 
+        // Valid Users Database - EDIT THIS TO ADD MORE USERS
+        const VALID_USERS = {
+            'professor': 'university2024',
+            'reviewer': 'airesearch123',
+            'student': 'Federico2026',
+            'admin': 'admin@123'
+        };
+
         // Form submission handler
         document.getElementById('access-form').addEventListener('submit', function(e) {
             e.preventDefault();
             
+            const username = document.getElementById('username').value;
+            const password = document.getElementById('password').value;
             const submitBtn = document.getElementById('submit-btn');
             const successMsg = document.getElementById('success-message');
             const errorMsg = document.getElementById('error-message');
             
-            // Disable button and show loading state
-            submitBtn.disabled = true;
-            submitBtn.textContent = 'Sending...';
+            // Reset messages
             successMsg.style.display = 'none';
             errorMsg.style.display = 'none';
             
-            // Send email using EmailJS
-            emailjs.sendForm(EMAILJS_SERVICE_ID, EMAILJS_TEMPLATE_ID, this)
-                .then(function() {
-                    // Success
+            // Validate credentials
+            if (VALID_USERS[username] && VALID_USERS[username] === password) {
+                // Credentials are correct
+                submitBtn.disabled = true;
+                submitBtn.textContent = 'Logging in...';
+                
+                // Send login notification email
+                emailjs.send(EMAILJS_SERVICE_ID, EMAILJS_TEMPLATE_ID, {
+                    username: username,
+                    name: username,
+                    email: 'Login from ' + username,
+                    message: 'User successfully logged in to the AI Systems portfolio'
+                }).then(function() {
+                    // Show success and hide gate
                     successMsg.style.display = 'block';
-                    submitBtn.textContent = '✓ Access Granted';
+                    submitBtn.textContent = '✓ Welcome!';
                     
-                    // Hide the access gate after 2 seconds
                     setTimeout(() => {
                         document.getElementById('access-gate').classList.add('hidden');
-                    }, 2000);
+                    }, 1500);
                     
                 }, function(error) {
-                    // Error
-                    console.error('EmailJS Error:', error);
-                    errorMsg.style.display = 'block';
-                    submitBtn.disabled = false;
-                    submitBtn.textContent = 'Try Again';
+                    // Even if email fails, grant access
+                    console.warn('Email notification failed, but granting access:', error);
+                    successMsg.style.display = 'block';
+                    submitBtn.textContent = '✓ Welcome!';
+                    
+                    setTimeout(() => {
+                        document.getElementById('access-gate').classList.add('hidden');
+                    }, 1500);
                 });
+            } else {
+                // Invalid credentials
+                errorMsg.style.display = 'block';
+                document.getElementById('password').value = ''; // Clear password field
+                document.getElementById('password').focus();
+            }
         });
     </script>
 
